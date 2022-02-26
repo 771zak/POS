@@ -3,7 +3,7 @@
     <input
       type="text"
       class="filter-search"
-      placeholder="Search product or category"
+      placeholder="Search by product name or brand"
       v-model="input"
       v-on:input="search()"
     />
