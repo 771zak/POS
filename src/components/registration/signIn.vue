@@ -69,6 +69,7 @@ export default {
 .signIn-container,
 .signUp-container {
 	margin: 80px auto;
+	box-shadow: 3px 4px 10px #999;
 }
 .signIn-container {
   width: 510px;

@@ -1,5 +1,6 @@
 import Localbase from "localbase";
 import { createStore } from "vuex";
+import { ipcRenderer } from "electron";
 let db = new Localbase("db");
 const smallTalk = require("smalltalk");
 
@@ -165,7 +166,8 @@ export default createStore({
 
         state.history.push(item);
         db.collection("history").add(item);
-				db.collection('receipt').add(item)
+				ipcRenderer.send("load-receipt", item)
+				localStorage.setItem("receipt", JSON.stringify(item))
         state.cart[payload] = [];
       } else {
         smallTalk.alert("Error", "the cart is empty!!");

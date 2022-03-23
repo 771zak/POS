@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<title>Receipt</title>
+	</head>
+	<body onload="fun()">
+		<div>
+			<h3>hello from receipt</h3>
+			<button>oijoij</button>
+		</div>
+
+
+		<script>
+			function fun() {
+							console.log(products)
+			}
+			let receipt = JSON.parse(localStorage.getItem("receipt"))
+			let products = JSON.parse(receipt.products)
+		</script>
+	</body>
+</html>

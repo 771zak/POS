@@ -5,7 +5,7 @@ module.exports = {
     },
   },
 	pages: {
-		index: "src/main",
-		receipt_page: "src/receipt_page/main.js",
+		index: "src/main.js",
+		receipt: "src/pages/receipt_page/main.js",
 	}
 };

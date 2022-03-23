@@ -63,6 +63,30 @@ ipcMain.on("maximize", () => {
 		win.maximize();
 	}
 })
+
+ipcMain.on("load-receipt", (load) => {
+	let receiptPage = new BrowserWindow({
+		show: true,
+		width: 400,
+		height: 500,
+		autoHideMenuBar: true,
+		webPreferences: {
+			nodeIntegration: true,
+			plugins: true
+		}
+	})
+
+	if (process.env.WEBPACK_DEV_SERVER_URL) {
+		receiptPage.loadURL(process.env.WEBPACK_DEV_SERVER_URL + "receipt.html")
+	} else {
+		receipt_page.loadURL(`app://./receipt_page`)
+	}
+
+	receiptPage.on("closed" , () => {
+		receiptPage = null;
+	})
+})
+
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar

@@ -47,7 +47,7 @@
 import cartCard from "./cartCard.vue";
 import sound from "@/assets/cash.mp3";
 import Localbase from "localbase";
-import { ipcRenderer } from "electron";
+/*import { ipcRenderer } from "electron";*/
 let db = new Localbase("db");
 
 
@@ -71,7 +71,6 @@ export default {
       sfx.play();
       this.$store.dispatch("proceed", this.cartId);
       if (this.cartId > 0) {
-				ipcRenderer('load-receipt')
         this.cartId--;
         this.cartList.pop();
       }
@@ -116,7 +115,7 @@ export default {
 				if (this.cart[this.cartId].length > 0) {
           let sfx = new Audio(sound);
           sfx.play();
-          this.$store.dispatch("proceed", this.cartId);
+					this.$store.dispatch("proceed", this.cartId);
           if (this.cartId > 0) {
             this.cartId--;
             this.cartList.pop();
