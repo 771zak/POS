@@ -111,11 +111,10 @@ export default {
           console.log("ampty array");
         }
 			} else if (e.keyCode == 112) { // when user click "p"
-				console.log("yay it work's");
 				if (this.cart[this.cartId].length > 0) {
           let sfx = new Audio(sound);
           sfx.play();
-					this.$store.dispatch("proceed", this.cartId);
+					this.$store.dispatch("proceedAndPrint", this.cartId);
           if (this.cartId > 0) {
             this.cartId--;
             this.cartList.pop();

@@ -1,23 +1,72 @@
 <!DOCTYPE html>
 <html lang="">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width">
-		<title>Receipt</title>
-	</head>
-	<body onload="fun()">
-		<div>
-			<h3>hello from receipt</h3>
-			<button>oijoij</button>
-		</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Receipt</title>
+    <style>
+      body {
+        text-align: center;
+      }
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
 
+      td,
+      th {
+        border: 1.5px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+    </style>
+  </head>
+  <body onload="generateTable()">
+    <div>
+      <h3>hello from receipt</h3>
+      <table>
+        <thead>
+          <th>Quantity</th>
+          <th>Name</th>
+          <th>Unit price</th>
+          <th>Total</th>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <h3>Total TTC DA: <span id="total"></span></h3>
+    </div>
 
-		<script>
-			function fun() {
-							console.log(products)
-			}
-			let receipt = JSON.parse(localStorage.getItem("receipt"))
-			let products = JSON.parse(receipt.products)
-		</script>
-	</body>
+    <script>
+      let receipt = JSON.parse(localStorage.getItem("receipt"));
+      let products = JSON.parse(receipt.products);
+      let table = document.querySelector("table");
+      let tableBody = document.querySelector("tbody");
+      let total = document.getElementById("total");
+			let  totalPrice = 0;
+      let newArr = [];
+      function generateTable() {
+        products.forEach((el) => {
+          let item = {
+            name: el.product.name,
+            price: el.product.Sprice.toFixed(2),
+            qte: el.quantity,
+            total: (el.quantity * el.product.Sprice).toFixed(2),
+          };
+          newArr.push(item);
+        });
+        newArr.forEach((el) => {
+          let newRow = document.createElement("tr");
+          Object.values(el).forEach((value) => {
+            let cell = document.createElement("td");
+            cell.innerText = value;
+            newRow.appendChild(cell);
+          });
+          tableBody.appendChild(newRow);
+        });
+				total.innerText = (receipt.totalS).toFixed(2);
+        //window.print();
+      }
+    </script>
+  </body>
 </html>

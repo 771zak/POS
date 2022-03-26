@@ -166,6 +166,45 @@ export default createStore({
 
         state.history.push(item);
         db.collection("history").add(item);
+        state.cart[payload] = [];
+      } else {
+        smallTalk.alert("Error", "the cart is empty!!");
+      }
+    },
+		proceedAndPrint(state, payload) {
+      if (state.cart[payload].length > 0) {
+        let user_name = JSON.parse(localStorage.getItem("user-info"));
+				//to get the total selling price and total purchase price
+        let total = 0;
+        let totalp = 0;
+        state.cart[payload].forEach((el) => {
+          total += el.product.Sprice * el.quantity;
+          totalp += el.product.Pprice * el.quantity;
+          return total, totalp;
+        });
+
+        let item = {
+          date: Number(new Date()),
+          products: JSON.stringify(state.cart[payload]),
+          seller: user_name.userName,
+          totalS: total,
+          totalP: totalp,
+        };
+
+				//to decrease the quantity from the stock
+				state.cart[payload].forEach(el=>{
+					state.products.forEach(item=>{
+						if (item.id == el.product.id) {
+							item.qty -= el.quantity;
+							db.collection('product').doc({id: el.product.id}).update({
+								qty: item.qty
+							})
+						}
+					})
+				})
+
+        state.history.push(item);
+        db.collection("history").add(item);
 				ipcRenderer.send("load-receipt", item)
 				localStorage.setItem("receipt", JSON.stringify(item))
         state.cart[payload] = [];
@@ -236,6 +275,9 @@ export default createStore({
     proceed({ commit }, payload) {
       commit("proceed", payload);
     },
+		proceedAndPrint({commit}, payload) {
+			commit("proceedAndPrint", payload)
+		},
     filterCat({ commit, state }, cat) {
       if (cat == "All") {
         commit("filterCat", state.products);
