@@ -7,6 +7,7 @@
     <style>
       body {
         text-align: center;
+        font-family: "Courier New", Courier, monospace;
       }
       table {
         font-family: arial, sans-serif;
@@ -24,7 +25,11 @@
   </head>
   <body onload="generateTable()">
     <div>
-      <h3>hello from receipt</h3>
+      <h2 id="storeName"></h2>
+      <h4 id="address"></h4>
+      <h5 id="date"></h5>
+      <h5 id="time"></h5>
+      <h5>Seller: <span id="seller"></span></h5>
       <table>
         <thead>
           <th>Quantity</th>
@@ -39,13 +44,31 @@
 
     <script>
       let receipt = JSON.parse(localStorage.getItem("receipt"));
+      let settings = JSON.parse(localStorage.getItem("settings"));
       let products = JSON.parse(receipt.products);
       let table = document.querySelector("table");
       let tableBody = document.querySelector("tbody");
       let total = document.getElementById("total");
-			let  totalPrice = 0;
+      let totalPrice = 0;
       let newArr = [];
+
+      let storeName = document.getElementById("storeName");
+      let seller = document.getElementById("seller");
+      let address = document.getElementById("address");
+      let date = document.getElementById("date");
+      let time = document.getElementById("time");
+
       function generateTable() {
+        let sellTime = new Date(receipt.date);
+
+        seller.innerText = JSON.parse(
+          localStorage.getItem("user-info")
+        ).userName;
+
+        storeName.innerText = settings[0].name;
+        address.innerText = settings[0].address;
+        date.innerText = sellTime.toDateString();
+        time.innerText = `${sellTime.getHours()}:${sellTime.getMinutes()}`;
         products.forEach((el) => {
           let item = {
             name: el.product.name,
@@ -64,8 +87,8 @@
           });
           tableBody.appendChild(newRow);
         });
-				total.innerText = (receipt.totalS).toFixed(2);
-        //window.print();
+        total.innerText = receipt.totalS.toFixed(2);
+        window.print();
       }
     </script>
   </body>

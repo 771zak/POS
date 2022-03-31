@@ -293,7 +293,7 @@ export default {
         image: this.img,
         barcode: this.barcode,
         ExDate: new Date(this.exDate),
-        cat: this.cat,
+        cat: this.cat == null ? "All" : this.cat,
       };
       this.products.push(newProduct);
       this.$store.dispatch("addToStock", newProduct);

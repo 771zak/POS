@@ -11,7 +11,7 @@ export default createStore({
     filteredList: [],
     cartId: 0,
     history: [],
-		filteredHis: [],
+    filteredHis: [],
     categories: ["All", "Fav", "Drink", "weight"],
   },
 
@@ -88,9 +88,9 @@ export default createStore({
       let i = state.cart[state.cartId].indexOf(prod);
       state.cart[state.cartId].splice(i, 1);
     },
-		changeQte(sate, qte) {
-			qte[1].quantity = qte[0];
-		},
+    changeQte(sate, qte) {
+      qte[1].quantity = qte[0];
+    },
     deleteCart(state) {
       if (state.cart.length == 1) {
         state.cart = [[]];
@@ -110,7 +110,12 @@ export default createStore({
         .get()
         .then((his) => {
           state.history = his;
-					state.filteredHis = his;
+          state.filteredHis = his;
+        });
+      db.collection("settings")
+        .get()
+        .then((set) => {
+          localStorage.setItem("settings", JSON.stringify(set));
         });
     },
     SET_SEARCHED_lIST(state, rs) {
@@ -135,7 +140,7 @@ export default createStore({
     proceed(state, payload) {
       if (state.cart[payload].length > 0) {
         let user_name = JSON.parse(localStorage.getItem("user-info"));
-				//to get the total selling price and total purchase price
+        //to get the total selling price and total purchase price
         let total = 0;
         let totalp = 0;
         state.cart[payload].forEach((el) => {
@@ -152,17 +157,17 @@ export default createStore({
           totalP: totalp,
         };
 
-				//to decrease the quantity from the stock
-				state.cart[payload].forEach(el=>{
-					state.products.forEach(item=>{
-						if (item.id == el.product.id) {
-							item.qty -= el.quantity;
-							db.collection('product').doc({id: el.product.id}).update({
-								qty: item.qty
-							})
-						}
-					})
-				})
+        //to decrease the quantity from the stock
+        state.cart[payload].forEach((el) => {
+          state.products.forEach((item) => {
+            if (item.id == el.product.id) {
+              item.qty -= el.quantity;
+              db.collection("product").doc({ id: el.product.id }).update({
+                qty: item.qty,
+              });
+            }
+          });
+        });
 
         state.history.push(item);
         db.collection("history").add(item);
@@ -171,10 +176,10 @@ export default createStore({
         smallTalk.alert("Error", "the cart is empty!!");
       }
     },
-		proceedAndPrint(state, payload) {
+    proceedAndPrint(state, payload) {
       if (state.cart[payload].length > 0) {
         let user_name = JSON.parse(localStorage.getItem("user-info"));
-				//to get the total selling price and total purchase price
+        //to get the total selling price and total purchase price
         let total = 0;
         let totalp = 0;
         state.cart[payload].forEach((el) => {
@@ -191,22 +196,22 @@ export default createStore({
           totalP: totalp,
         };
 
-				//to decrease the quantity from the stock
-				state.cart[payload].forEach(el=>{
-					state.products.forEach(item=>{
-						if (item.id == el.product.id) {
-							item.qty -= el.quantity;
-							db.collection('product').doc({id: el.product.id}).update({
-								qty: item.qty
-							})
-						}
-					})
-				})
+        //to decrease the quantity from the stock
+        state.cart[payload].forEach((el) => {
+          state.products.forEach((item) => {
+            if (item.id == el.product.id) {
+              item.qty -= el.quantity;
+              db.collection("product").doc({ id: el.product.id }).update({
+                qty: item.qty,
+              });
+            }
+          });
+        });
 
         state.history.push(item);
         db.collection("history").add(item);
-				ipcRenderer.send("load-receipt", item)
-				localStorage.setItem("receipt", JSON.stringify(item))
+        ipcRenderer.send("load-receipt", item);
+        localStorage.setItem("receipt", JSON.stringify(item));
         state.cart[payload] = [];
       } else {
         smallTalk.alert("Error", "the cart is empty!!");
@@ -215,15 +220,15 @@ export default createStore({
     filterCat(state, rs) {
       state.filteredList = rs;
     },
-		filterByDate(state, rs) {
-			state.filteredHis = rs;
-		},
-		sort_by_exDate(state, rs) {
-			state.filteredList = rs
-		},
-		sort_all_products(state) {
-			state.filteredList = state.products;
-		}
+    filterByDate(state, rs) {
+      state.filteredHis = rs;
+    },
+    sort_by_exDate(state, rs) {
+      state.filteredList = rs;
+    },
+    sort_all_products(state) {
+      state.filteredList = state.products;
+    },
   },
 
   actions: {
@@ -236,9 +241,9 @@ export default createStore({
     deleteFromCart({ commit }, prod) {
       commit("deleteFromCart", prod);
     },
-		changeQte({commit}, prod, qte) {
-			commit('changeQte', prod, qte)
-		},
+    changeQte({ commit }, prod, qte) {
+      commit("changeQte", prod, qte);
+    },
     fetching_data({ commit }) {
       commit("Fetch_Products");
     },
@@ -262,7 +267,7 @@ export default createStore({
         let resDays = (ExDate - today) / 8.64e7;
         if (resDays < 10) {
           newArr.push(el);
-					commit("sort_by_exDate", newArr);
+          commit("sort_by_exDate", newArr);
         }
       });
     },
@@ -275,9 +280,9 @@ export default createStore({
     proceed({ commit }, payload) {
       commit("proceed", payload);
     },
-		proceedAndPrint({commit}, payload) {
-			commit("proceedAndPrint", payload)
-		},
+    proceedAndPrint({ commit }, payload) {
+      commit("proceedAndPrint", payload);
+    },
     filterCat({ commit, state }, cat) {
       if (cat == "All") {
         commit("filterCat", state.products);
@@ -288,32 +293,38 @@ export default createStore({
         commit("filterCat", rs);
       }
     },
-		filterByDate({commit, state}, payload) {
-			let rs = state.history.filter((el) => {
-				let day = new Date().getDate();
-				let month = new Date().getMonth();
-				if(payload== "today") {
-					if((new Date(el.date).getDate())==(day) && new Date(el.date).getMonth()== month) {
-						return el
-					}
-				} else if (payload == "yesterday") {
-					if((new Date(el.date).getDate())==(day-1) && new Date(el.date).getMonth()==month) {
-						return el
-					}
-				} else if (payload == "month") {
-					if((new Date(el.date).getMonth())==(month)) {
-						return el
-					}
-				} else if ( payload == "Lmonth" ) {
-					if ( (new Date(el.date).getMonth()==(month-1)) ) {
-						return el;
-					}
-				} else {
-					return el
-				}
-			})
-			commit("filterByDate", rs)
-		}
+    filterByDate({ commit, state }, payload) {
+      let rs = state.history.filter((el) => {
+        let day = new Date().getDate();
+        let month = new Date().getMonth();
+        if (payload == "today") {
+          if (
+            new Date(el.date).getDate() == day &&
+            new Date(el.date).getMonth() == month
+          ) {
+            return el;
+          }
+        } else if (payload == "yesterday") {
+          if (
+            new Date(el.date).getDate() == day - 1 &&
+            new Date(el.date).getMonth() == month
+          ) {
+            return el;
+          }
+        } else if (payload == "month") {
+          if (new Date(el.date).getMonth() == month) {
+            return el;
+          }
+        } else if (payload == "Lmonth") {
+          if (new Date(el.date).getMonth() == month - 1) {
+            return el;
+          }
+        } else {
+          return el;
+        }
+      });
+      commit("filterByDate", rs);
+    },
   },
 
   modules: {},
