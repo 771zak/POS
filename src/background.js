@@ -20,8 +20,6 @@ async function createWindow() {
 		frame: false,
 		icon: "./src/assets/logo.png",
 		webPreferences: {
-			// Use pluginOptions.nodeIntegration, leave this alone
-			// See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
 			nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
 			contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
 			enableRemoteModule: true,
@@ -70,21 +68,25 @@ ipcMain.on("load-receipt", (load) => {
 		show: true,
 		width: 400,
 		height: 500,
+		frame: false,
 		autoHideMenuBar: true,
 		webPreferences: {
-			nodeIntegration: true,
-			plugins: true,
+			nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+			contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+			enableRemoteModule: true,
 		},
 	});
 
 	if (process.env.WEBPACK_DEV_SERVER_URL) {
-		receiptPage.loadURL(process.env.WEBPACK_DEV_SERVER_URL + "receipt.html");
-	} else {
-		receiptPage.loadURL(`app://./receipt_page`);
+		receiptPage.loadURL(process.env.WEBPACK_DEV_SERVER_URL + "//#/receiptPage");
 	}
 
 	receiptPage.on("closed", () => {
 		receiptPage = null;
+	});
+
+	receiptPage.webContents.on("did-frame-finish-load", () => {
+		receiptPage.webContents.send("loadReceipt");
 	});
 });
 
