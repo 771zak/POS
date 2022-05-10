@@ -1,6 +1,6 @@
 import Localbase from "localbase";
 import { createStore } from "vuex";
-import { ipcRenderer } from "electron";
+//import { ipcRenderer } from "electron";
 let db = new Localbase("db");
 const smallTalk = require("smalltalk");
 
@@ -12,7 +12,7 @@ export default createStore({
 		cartId: 0,
 		history: [],
 		filteredHis: [],
-		categories: ["All", "Fav", "Drink", "weight"],
+		categories: [],
 		receipt: [],
 	},
 
@@ -107,16 +107,24 @@ export default createStore({
 					state.products = product;
 					state.filteredList = product;
 				});
+
 			db.collection("history")
 				.get()
 				.then((his) => {
 					state.history = his;
 					state.filteredHis = his;
 				});
+
 			db.collection("settings")
 				.get()
 				.then((set) => {
 					localStorage.setItem("settings", JSON.stringify(set));
+				});
+
+			db.collection("categories")
+				.get()
+				.then((cats) => {
+					state.categories = cats;
 				});
 		},
 		SET_SEARCHED_lIST(state, rs) {
