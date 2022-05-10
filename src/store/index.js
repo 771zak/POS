@@ -211,7 +211,7 @@ export default createStore({
 
 				state.history.push(item);
 				db.collection("history").add(item);
-				ipcRenderer.send("load-receipt", item);
+				//ipcRenderer.send("load-receipt", item);
 				state.receipt = item;
 				localStorage.setItem("receipt", JSON.stringify(item));
 				state.cart[payload] = [];
