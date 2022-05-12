@@ -18,87 +18,108 @@
 			<div class="product-input" v-if="showInput">
 				<h3>Add product</h3>
 				<form @submit.prevent="addToStock(prod)">
-					<div class="i-sec one">
-						<label for="barcode">Enter the barcode:</label>
-						<input
-							required
-							type="number"
-							id="barcode"
-							placeholder="BarCode"
-							v-model="barcode"
-							@input="checkBar()"
-						/>
-						<label for="brand">Enter the brand:</label>
-						<input
-							type="text"
-							id="brand"
-							placeholder="Brand"
-							v-model="brand"
-							required
-						/>
-
-						<label for="name">Enter the name:</label>
-						<input
-							required
-							type="text"
-							id="name"
-							placeholder="Product name"
-							v-model="name"
-						/>
-
-						<label for="categorie">Enter the categorie:</label>
-						<select id="categorie" v-model="cat">
-							<option :value="cat.name" v-for="cat in categories" :key="cat.id">
-								{{ cat.name }}
-							</option>
-						</select>
-					</div>
-					<div class="i-sec two">
-						<label for="qte"
-							>Enter the quantity:
-							<span v-if="cat == 'weight'">(Kg)</span>
-						</label>
-						<input
-							required
-							type="number"
-							id="qte"
-							step="any"
-							placeholder="Qty"
-							v-model="qty"
-						/>
-
-						<label for="Pprice">Enter the purchase price:</label>
-						<input
-							required
-							type="number"
-							step="any"
-							id="Pprice"
-							placeholder="Purchase price"
-							v-model="Pprice"
-						/>
-
-						<label for="Sprice">Enter the Selling price:</label>
-						<input
-							required
-							type="number"
-							id="Sprice"
-							step="any"
-							placeholder="Selling price"
-							v-model="Sprice"
-						/>
-						<div class="i-sec fore">
-							<label for="ExDate">Enter expiring date:</label>
-							<input type="date" id="ExDate" required v-model="exDate" />
+					<div class="i-sec">
+						<div>
+							<label for="barcode">Enter the barcode:</label>
 							<input
-								type="file"
-								name="img"
-								accept="image/*"
-								@change="onFileSelected"
+								required
+								type="number"
+								id="barcode"
+								placeholder="BarCode"
+								v-model="barcode"
+								@input="checkBar()"
+							/>
+						</div>
+						<div>
+							<label for="brand">Enter the brand:</label>
+							<input
+								type="text"
+								id="brand"
+								placeholder="Brand"
+								v-model="brand"
+								required
 							/>
 						</div>
 					</div>
-					<div class="i-sec three">
-						<input type="submit" value="Add to stock" />
+					<div class="i-sec">
+						<div>
+							<label for="name">Enter the name:</label>
+							<input
+								required
+								type="text"
+								id="name"
+								placeholder="Product name"
+								v-model="name"
+							/>
+						</div>
+
+						<div>
+							<label for="categorie">Enter the categorie:</label>
+							<select id="categorie" v-model="cat">
+								<option
+									:value="cat.name"
+									v-for="cat in categories"
+									:key="cat.id"
+								>
+									{{ cat.name }}
+								</option>
+							</select>
+						</div>
+					</div>
+					<div class="i-sec">
+						<div>
+							<label for="qte"
+								>Enter the quantity:
+								<span v-if="cat == 'weight'">(Kg)</span>
+							</label>
+							<input
+								required
+								type="number"
+								id="qte"
+								step="any"
+								placeholder="Qty"
+								v-model="qty"
+							/>
+						</div>
+						<div>
+							<label for="Pprice">Enter the purchase price:</label>
+							<input
+								required
+								type="number"
+								step="any"
+								id="Pprice"
+								placeholder="Purchase price"
+								v-model="Pprice"
+							/>
+						</div>
+					</div>
+					<div class="i-sec">
+						<div>
+							<label for="Sprice">Enter the Selling price:</label>
+							<input
+								required
+								type="number"
+								id="Sprice"
+								step="any"
+								placeholder="Selling price"
+								v-model="Sprice"
+							/>
+						</div>
+						<div>
+							<label for="ExDate">Enter expiring date:</label>
+							<input type="date" id="ExDate" required v-model="exDate" />
+						</div>
+					</div>
+					<div class="i-sec">
+						<input
+							type="file"
+							name="img"
+							accept="image/*"
+							@change="onFileSelected"
+						/>
+					</div>
+					<div class="i-sec">
+						<primButton :title="Addtostock" />
 					</div>
 				</form>
 				<button @click="this.showInput = !this.showInput" class="close-form">
@@ -107,7 +128,7 @@
 			</div>
 		</transition>
 
-		<!-- Edit product modal -->
+		<!-- edit product modal -->
 		<transition name="fade">
 			<div class="product-input" v-if="showEdit">
 				<h3>Edit product</h3>
@@ -187,7 +208,7 @@
 						/>
 					</div>
 					<div class="i-sec three">
-						<input type="submit" value="Update" />
+						<primButton :title="Update" />
 					</div>
 				</form>
 				<button @click="this.showEdit = !this.showEdit" class="close-form">
@@ -253,11 +274,13 @@ import search from "./search.vue";
 import Localbase from "localbase";
 let db = new Localbase("db");
 const smallTalk = require("smalltalk");
+import primButton from "../primButton.vue";
 
 export default {
 	name: "stockScreen",
 	components: {
 		search,
+		primButton,
 	},
 	data() {
 		return {
@@ -392,6 +415,7 @@ table td {
 .stock {
 	position: relative;
 }
+
 .product-input,
 .edit-fact {
 	position: absolute;
@@ -400,7 +424,7 @@ table td {
 	z-index: 2;
 	left: 0;
 	right: 0;
-	margin-top: 7rem;
+	margin-top: 3rem;
 	margin-left: auto;
 	margin-right: auto;
 	background-color: #fff;
@@ -411,21 +435,40 @@ table td {
 	width: 100%;
 	padding-top: 30px;
 	height: 100%;
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 2fr 1fr;
-	margin-top: 10px;
-}
-.i-sec {
-	align-self: start;
-	justify-self: center;
-}
-.three {
-	grid-column: 1/3;
-	margin-bottom: 20px;
 	display: flex;
 	flex-direction: column;
+	margin-top: 10px;
+}
+
+.i-sec {
+	width: 100%;
+	display: flex;
 	align-items: center;
+	justify-content: space-around;
+}
+
+i-sec label {
+	display: block;
+	width: 100%;
+}
+
+.i-sec div {
+	display: flex;
+	margin-bottom: 10px;
+	flex-direction: column;
+	align-items: center;
+	width: 40%;
+	align-items: flex-start;
+}
+
+input {
+	border: none;
+	border-bottom: 2px solid #ebebeb;
+	transition: 0.3s ease;
+}
+input:focus {
+	outline: none;
+	border-bottom: 2px solid #333;
 }
 .product-input input {
 	display: block;
