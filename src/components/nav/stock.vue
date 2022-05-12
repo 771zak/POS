@@ -20,10 +20,10 @@
 				<form @submit.prevent="addToStock(prod)">
 					<div class="i-sec">
 						<div>
-							<label for="barcode">Enter the barcode:</label>
+							<label for="barcode">Enter the barcode</label>
 							<input
 								required
-								type="number"
+								type="text"
 								id="barcode"
 								placeholder="BarCode"
 								v-model="barcode"
@@ -31,7 +31,7 @@
 							/>
 						</div>
 						<div>
-							<label for="brand">Enter the brand:</label>
+							<label for="brand">Enter the brand</label>
 							<input
 								type="text"
 								id="brand"
@@ -43,7 +43,7 @@
 					</div>
 					<div class="i-sec">
 						<div>
-							<label for="name">Enter the name:</label>
+							<label for="name">Enter the name</label>
 							<input
 								required
 								type="text"
@@ -53,8 +53,8 @@
 							/>
 						</div>
 
-						<div>
-							<label for="categorie">Enter the categorie:</label>
+						<div style="flex-direction: row; align-items: center">
+							<label for="categorie">Enter the categorie</label>
 							<select id="categorie" v-model="cat">
 								<option
 									:value="cat.name"
@@ -69,7 +69,7 @@
 					<div class="i-sec">
 						<div>
 							<label for="qte"
-								>Enter the quantity:
+								>Enter the quantity
 								<span v-if="cat == 'weight'">(Kg)</span>
 							</label>
 							<input
@@ -82,7 +82,7 @@
 							/>
 						</div>
 						<div>
-							<label for="Pprice">Enter the purchase price:</label>
+							<label for="Pprice">Enter the purchase price</label>
 							<input
 								required
 								type="number"
@@ -95,7 +95,7 @@
 					</div>
 					<div class="i-sec">
 						<div>
-							<label for="Sprice">Enter the Selling price:</label>
+							<label for="Sprice">Enter the Selling price</label>
 							<input
 								required
 								type="number"
@@ -106,7 +106,7 @@
 							/>
 						</div>
 						<div>
-							<label for="ExDate">Enter expiring date:</label>
+							<label for="ExDate">Enter expiring date</label>
 							<input type="date" id="ExDate" required v-model="exDate" />
 						</div>
 					</div>
@@ -133,73 +133,91 @@
 			<div class="product-input" v-if="showEdit">
 				<h3>Edit product</h3>
 				<form @submit.prevent="updateProd(prod)">
-					<div class="i-sec one">
-						<label for="brand">Enter the brand:</label>
-						<input
-							type="text"
-							id="brand"
-							placeholder="Brand"
-							v-model="editProd.brand"
-							required
-						/>
-						<label for="name">Enter the name:</label>
-
-						<input
-							required
-							type="text"
-							id="name"
-							placeholder="Product name"
-							v-model="editProd.name"
-						/>
-
-						<label for="barcode">Enter the barcode:</label>
-						<input
-							required
-							type="number"
-							id="barcode"
-							placeholder="BarCode"
-							v-model="editProd.barcode"
-						/>
-
-						<label for="categorie">Enter the categorie:</label>
-						<select id="categorie" v-model="editProd.cat">
-							<option :value="cat" v-for="cat in categories" :key="cat">
-								{{ cat }}
-							</option>
-						</select>
+					<div class="i-sec">
+						<div>
+							<label for="brand">Enter the brand</label>
+							<input
+								type="text"
+								id="brand"
+								placeholder="Brand"
+								v-model="editProd.brand"
+								required
+							/>
+						</div>
+						<div>
+							<label for="name">Enter the name</label>
+							<input
+								required
+								type="text"
+								id="name"
+								placeholder="Product name"
+								v-model="editProd.name"
+							/>
+						</div>
 					</div>
-					<div class="i-sec two">
-						<label for="qte">Enter the quantity:</label>
-						<input
-							required
-							type="number"
-							id="qte"
-							step="any"
-							placeholder="Qty"
-							v-model="editProd.qty"
-						/>
+					<div class="i-sec">
+						<div>
+							<label for="barcode">Enter the barcode</label>
+							<input
+								required
+								type="text"
+								id="barcode"
+								placeholder="BarCode"
+								v-model="editProd.barcode"
+							/>
+						</div>
+						<div style="flex-direction: row; align-items: center">
+							<label for="categorie">Enter the categorie</label>
+							<select id="categorie" v-model="editProd.cat">
+								<option :value="cat" v-for="cat in categories" :key="cat.id">
+									{{ cat.name }}
+								</option>
+							</select>
+						</div>
+					</div>
+					<div class="i-sec">
+						<div>
+							<label for="qte">Enter the quantity</label>
+							<input
+								required
+								type="number"
+								id="qte"
+								step="any"
+								placeholder="Qty"
+								v-model="editProd.qty"
+							/>
+						</div>
 
-						<label for="Pprice">Enter the purchase price:</label>
-						<input
-							required
-							type="number"
-							step="any"
-							id="Pprice"
-							placeholder="Purchase price"
-							v-model="editProd.Pprice"
-						/>
-
-						<label for="Sprice">Enter the Selling price:</label>
-						<input
-							required
-							type="number"
-							id="Sprice"
-							step="any"
-							placeholder="Selling price"
-							v-model="editProd.Sprice"
-						/>
-						<label for="ExDate">Enter the expiring date:</label>
-						<input type="date" id="ExDate" v-model="editProd.ExDate" />
+						<div>
+							<label for="Pprice">Enter the purchase price</label>
+							<input
+								required
+								type="number"
+								step="any"
+								id="Pprice"
+								placeholder="Purchase price"
+								v-model="editProd.Pprice"
+							/>
+						</div>
+					</div>
+					<div class="i-sec">
+						<div>
+							<label for="Sprice">Enter the Selling price</label>
+							<input
+								required
+								type="number"
+								id="Sprice"
+								step="any"
+								placeholder="Selling price"
+								v-model="editProd.Sprice"
+							/>
+						</div>
+						<div>
+							<label for="ExDate">Enter the expiring date</label>
+							<input type="date" id="ExDate" v-model="editProd.ExDate" />
+						</div>
+					</div>
+					<div class="i-sec">
 						<input
 							type="file"
 							name="img"
@@ -207,7 +225,7 @@
 							@change="onFileSelected"
 						/>
 					</div>
-					<div class="i-sec three">
+					<div class="i-sec">
 						<primButton :title="Update" />
 					</div>
 				</form>
@@ -226,7 +244,7 @@
 				<tr>
 					<th>Id</th>
 					<th>EXP date</th>
-					<th>BarCode</th>
+					<th>Ref</th>
 					<th>Brand</th>
 					<th>Product name</th>
 					<th>Purchase price</th>
@@ -292,7 +310,7 @@ export default {
 			showInput: false,
 			products: [],
 			img: null,
-			barcode: Number,
+			barcode: "",
 			cat: null,
 			exDate: Number,
 			showEdit: false,
@@ -470,6 +488,11 @@ input:focus {
 	outline: none;
 	border-bottom: 2px solid #333;
 }
+
+select {
+	padding: 5px 10px;
+}
+
 .product-input input {
 	display: block;
 	margin-bottom: 10px;
