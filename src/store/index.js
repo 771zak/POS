@@ -259,7 +259,7 @@ export default createStore({
 		},
 		search({ commit, state }, input) {
 			let rs = state.products.filter((el) => {
-				return (el.name + el.brand).match(input);
+				return (el.name + el.brand + el.barcode).match(input);
 			});
 			commit("SET_SEARCHED_lIST", rs);
 		},
