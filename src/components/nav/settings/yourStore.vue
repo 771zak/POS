@@ -22,25 +22,33 @@
 				<div class="catList">
 					<ul v-for="cat in categories" :key="cat.id">
 						<li class="categorie">{{ cat.name }}</li>
+						<img src="@/assets/icons/Edit.svg" alt="" @click="editCat(cat)" />
 					</ul>
 				</div>
 			</div>
 		</div>
+		<editCat :value="cat" v-if="showEditCat" />
 	</div>
 </template>
 
 <script>
 import Localbase from "localbase";
 let db = new Localbase("db");
+import editCat from "../../editCat.vue";
 
 export default {
 	name: "yourStore",
+	components: {
+		editCat,
+	},
 	data() {
 		return {
 			storeName: "",
 			tax: 0,
 			address: "",
 			categorie: "",
+			cat: {},
+			showEditCat: false,
 		};
 	},
 	methods: {
@@ -58,6 +66,14 @@ export default {
 				name: this.categorie,
 			});
 			this.this.categorie = "";
+		},
+		editCat(cat) {
+			this.cat = cat;
+			if (!this.showEditCat) {
+				this.showEditCat = true;
+			} else if (this.showEditCat) {
+				this.showEditCat = true;
+			}
 		},
 	},
 	computed: {
@@ -93,6 +109,22 @@ input {
 	width: 20%;
 	overflow: scroll;
 }
+.catList ul {
+	display: flex;
+	margin-bottom: 5px;
+	justify-content: space-around;
+	align-items: center;
+	background-color: #f7f6f7;
+}
+.catList img {
+	cursor: pointer;
+}
+.catList img:hover {
+	opacity: 0.8;
+}
+.catList img:active {
+	transform: scale(0.9);
+}
 .store-setting ul {
 	list-style: none;
 	font-size: 14pt;
@@ -100,7 +132,6 @@ input {
 	padding: 5px;
 }
 .store-setting li {
-	background-color: #f7f6f7;
 	border-radius: 4px;
 	padding: 10px;
 }

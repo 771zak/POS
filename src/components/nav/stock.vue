@@ -344,6 +344,9 @@ export default {
 			this.name = "";
 			this.Pprice = Number;
 			this.Sprice = Number;
+			this.barcode = "";
+			this.qty = null;
+			this.exDate = null;
 		},
 		onFileSelected(event) {
 			//to add image
