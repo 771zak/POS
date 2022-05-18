@@ -1,24 +1,46 @@
 <template>
 	<div class="editCatContainer">
-		<input type="text" :value="value.name" />
-		<primButton />
+		<input type="text" :value="value.name" @change="editCat($event)" />
+		<primButton @click="$emit('closeshowEditCat')" />
 	</div>
 </template>
 
 <script>
 import primButton from "../components/primButton.vue";
+import Localbase from "localbase";
+let db = new Localbase("db");
+
 export default {
 	name: "editCat",
 	components: {
 		primButton,
 	},
+	data() {
+		return {
+			editedCat: "",
+		};
+	},
 	props: ["value"],
+	methods: {
+		editCat(e) {
+			console.log(this.value.name);
+			console.log(e.target.value);
+			db.collection("categories")
+				.doc({ id: this.value.id })
+				.update({
+					name: e.target.value,
+				})
+				.then(() => {
+					this.$emit("closeshowEditCat");
+				});
+		},
+	},
 };
 </script>
 
 <style>
 .editCatContainer {
-	width: 40%;
+	width: 30%;
 	height: 30vh;
 	position: absolute;
 	top: 50%;
@@ -26,7 +48,7 @@ export default {
 	transform: translate(-50%, -50%);
 	background: #f7f7f7;
 	display: flex;
-	box-shadow: 10px 10px 11px -3px rgb(0 0 0 / 10%);
+	box-shadow: 10px 10px 11px -3px rgb(0 0 0 / 40%);
 	flex-direction: column;
 	border-radius: 10px;
 	align-items: center;

@@ -27,7 +27,11 @@
 				</div>
 			</div>
 		</div>
-		<editCat :value="cat" v-if="showEditCat" />
+		<editCat
+			:value="cat"
+			v-if="showEditCat"
+			@closeshowEditCat="showEditCat = false"
+		/>
 	</div>
 </template>
 
@@ -65,7 +69,7 @@ export default {
 				id: this.categorie + Math.floor(Math.random() * 11),
 				name: this.categorie,
 			});
-			this.this.categorie = "";
+			this.categorie = "";
 		},
 		editCat(cat) {
 			this.cat = cat;
