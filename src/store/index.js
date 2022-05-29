@@ -335,6 +335,17 @@ export default createStore({
 			});
 			commit("filterByDate", rs);
 		},
+		addNewCategorie({ state }, payload) {
+			state.categories.push(payload);
+			console.log(payload);
+		},
+		editCat({ state }, payload) {
+			state.categories.forEach((el) => {
+				if (el == payload.oldValue) {
+					el.name = payload.newValue;
+				}
+			});
+		},
 	},
 
 	modules: {},

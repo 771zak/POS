@@ -16,7 +16,12 @@
 			<h2 style="margin-top: 10px">Categories</h2>
 			<div class="categories-container">
 				<div class="catForm">
-					<input type="text" placeholder="Add categorie" v-model="categorie" />
+					<input
+						type="text"
+						placeholder="Add categorie"
+						v-model="categorie"
+						@keyup.enter="addNewCategorie"
+					/>
 					<button @click="addNewCategorie">Add categorie</button>
 				</div>
 				<div class="catList">
@@ -65,10 +70,12 @@ export default {
 			db.collection("settings").set([sets]);
 		},
 		addNewCategorie() {
-			db.collection("categories").add({
+			let newCat = {
 				id: this.categorie + Math.floor(Math.random() * 11),
 				name: this.categorie,
-			});
+			};
+			db.collection("categories").add(newCat);
+			this.$store.dispatch("addNewCategorie", newCat);
 			this.categorie = "";
 		},
 		editCat(cat) {

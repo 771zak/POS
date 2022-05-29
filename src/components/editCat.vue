@@ -1,6 +1,11 @@
 <template>
 	<div class="editCatContainer">
-		<input type="text" :value="value.name" @change="editCat($event)" />
+		<input
+			type="text"
+			:value="value.name"
+			@change="editCat($event)"
+			id="editCatInput"
+		/>
 		<primButton @click="$emit('closeshowEditCat')" />
 	</div>
 </template>
@@ -23,8 +28,7 @@ export default {
 	props: ["value"],
 	methods: {
 		editCat(e) {
-			console.log(this.value.name);
-			console.log(e.target.value);
+			/* console.log(this.value); */
 			db.collection("categories")
 				.doc({ id: this.value.id })
 				.update({
@@ -33,7 +37,16 @@ export default {
 				.then(() => {
 					this.$emit("closeshowEditCat");
 				});
+
+			this.$store.dispatch("editCat", {
+				newValue: e.target.value,
+				oldValue: this.value,
+			});
 		},
+	},
+	mounted() {
+		let input = document.getElementById("editCatInput");
+		input.focus();
 	},
 };
 </script>
