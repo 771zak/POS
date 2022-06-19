@@ -107,7 +107,7 @@
 						</div>
 						<div>
 							<label for="ExDate">Enter expiring date</label>
-							<input type="date" id="ExDate" required v-model="exDate" />
+							<input type="date" id="ExDate" v-model="exDate" />
 						</div>
 					</div>
 					<div class="i-sec">

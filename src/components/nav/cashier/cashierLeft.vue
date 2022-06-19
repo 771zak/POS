@@ -81,28 +81,28 @@ export default {
 		},
 	},
 	mounted() {
-		window.onkeypress = (e) => {
-			if (this.$route.name == "cashier") {
-				let tablinks = document.getElementsByClassName("cat");
-				for (let i = 0; i < tablinks.length; i++) {
-					tablinks[i].className = tablinks[i].className.replace(" active", "");
-				}
-				tablinks[0].className += " active";
-				this.$store.commit("undoCat");
-				this.product.forEach((el) => {
-					if (el.barcode == e.key) {
-						this.$store.commit("addToCart", {
-							product: el,
-							quantity: 1,
-						});
-					}
-				});
-			}
-		};
-		if (this.categories.length > 0) {
-			let tablinks = document.getElementsByClassName("cat");
-			tablinks[0].className += " active";
-		}
+		/* window.onkeypress = (e) => { */
+		/* 	if (this.$route.name == "cashier") { */
+		/* 		let tablinks = document.getElementsByClassName("cat"); */
+		/* 		for (let i = 0; i < tablinks.length; i++) { */
+		/* 			tablinks[i].className = tablinks[i].className.replace(" active", ""); */
+		/* 		} */
+		/* 		tablinks[0].className += " active"; */
+		/* 		this.$store.commit("undoCat"); */
+		/* 		this.product.forEach((el) => { */
+		/* 			if (el.barcode == e.key) { */
+		/* 				this.$store.commit("addToCart", { */
+		/* 					product: el, */
+		/* 					quantity: 1, */
+		/* 				}); */
+		/* 			} */
+		/* 		}); */
+		/* 	} */
+		/* }; */
+		/* if (this.categories.length > 0) { */
+		/* 	let tablinks = document.getElementsByClassName("cat"); */
+		/* 	tablinks[0].className += " active"; */
+		/* } */
 	},
 	unmounted() {
 		this.$store.dispatch("filterCat", "All");
