@@ -1,6 +1,6 @@
 import Localbase from "localbase";
 import { createStore } from "vuex";
-import { ipcRenderer } from "electron";
+//import { ipcRenderer } from "electron";
 let db = new Localbase("db");
 const smallTalk = require("smalltalk");
 
@@ -12,7 +12,7 @@ export default createStore({
 		cartId: 0,
 		history: [],
 		filteredHis: [],
-		categories: ["All", "Fav", "Drink", "weight"],
+		categories: [],
 		receipt: [],
 	},
 
@@ -107,16 +107,24 @@ export default createStore({
 					state.products = product;
 					state.filteredList = product;
 				});
+
 			db.collection("history")
 				.get()
 				.then((his) => {
 					state.history = his;
 					state.filteredHis = his;
 				});
+
 			db.collection("settings")
 				.get()
 				.then((set) => {
 					localStorage.setItem("settings", JSON.stringify(set));
+				});
+
+			db.collection("categories")
+				.get()
+				.then((cats) => {
+					state.categories = cats;
 				});
 		},
 		SET_SEARCHED_lIST(state, rs) {
@@ -211,7 +219,7 @@ export default createStore({
 
 				state.history.push(item);
 				db.collection("history").add(item);
-				ipcRenderer.send("load-receipt", item);
+				//ipcRenderer.send("load-receipt", item);
 				state.receipt = item;
 				localStorage.setItem("receipt", JSON.stringify(item));
 				state.cart[payload] = [];
@@ -251,7 +259,7 @@ export default createStore({
 		},
 		search({ commit, state }, input) {
 			let rs = state.products.filter((el) => {
-				return (el.name + el.brand).match(input);
+				return (el.name + el.brand + el.barcode).match(input);
 			});
 			commit("SET_SEARCHED_lIST", rs);
 		},
@@ -326,6 +334,17 @@ export default createStore({
 				}
 			});
 			commit("filterByDate", rs);
+		},
+		addNewCategorie({ state }, payload) {
+			state.categories.push(payload);
+			console.log(payload);
+		},
+		editCat({ state }, payload) {
+			state.categories.forEach((el) => {
+				if (el == payload.oldValue) {
+					el.name = payload.newValue;
+				}
+			});
 		},
 	},
 
