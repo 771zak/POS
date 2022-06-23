@@ -68,6 +68,7 @@ export default {
 				address: this.address,
 			};
 			db.collection("settings").set([sets]);
+			this.$store.dispatch("changeTax", this.tax);
 		},
 		addNewCategorie() {
 			let newCat = {
@@ -100,6 +101,9 @@ export default {
 				this.tax = set[0].tax;
 				this.address = set[0].address;
 			});
+	},
+	unmounted() {
+		this.$store.dispatch("fetching_data");
 	},
 };
 </script>

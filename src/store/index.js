@@ -14,6 +14,7 @@ export default createStore({
 		filteredHis: [],
 		categories: [],
 		receipt: [],
+		tax: Number,
 	},
 
 	getters: {
@@ -119,6 +120,7 @@ export default createStore({
 				.get()
 				.then((set) => {
 					localStorage.setItem("settings", JSON.stringify(set));
+					state.tax = set[0].tax;
 				});
 
 			db.collection("categories")
@@ -157,12 +159,12 @@ export default createStore({
 					totalp += el.product.Pprice * el.quantity;
 					return total, totalp;
 				});
-
+				let totalAfterTax = total * (1 + state.tax / 100);
 				let item = {
 					date: Number(new Date()),
 					products: JSON.stringify(state.cart[payload]),
 					seller: user_name.userName,
-					totalS: total,
+					totalS: totalAfterTax,
 					totalP: totalp,
 				};
 
@@ -345,6 +347,9 @@ export default createStore({
 					el.name = payload.newValue;
 				}
 			});
+		},
+		changeTax({ state }, payload) {
+			state.tax = payload;
 		},
 	},
 
