@@ -20,12 +20,12 @@
 				<form @submit.prevent="addToStock(prod)">
 					<div class="i-sec">
 						<div>
-							<label for="barcode">Enter the barcode</label>
+							<label for="barcode">Enter the Ref</label>
 							<input
 								required
 								type="text"
 								id="barcode"
-								placeholder="BarCode"
+								placeholder="Ref"
 								v-model="barcode"
 								@input="checkBar()"
 							/>
@@ -106,7 +106,7 @@
 							/>
 						</div>
 						<div>
-							<label for="ExDate">Enter expiring date</label>
+							<label for="ExDate">Enter purchase date</label>
 							<input type="date" id="ExDate" v-model="exDate" />
 						</div>
 					</div>
@@ -157,12 +157,12 @@
 					</div>
 					<div class="i-sec">
 						<div>
-							<label for="barcode">Enter the barcode</label>
+							<label for="barcode">Enter the Ref</label>
 							<input
 								required
 								type="text"
 								id="barcode"
-								placeholder="BarCode"
+								placeholder="Ref"
 								v-model="editProd.barcode"
 							/>
 						</div>
@@ -213,7 +213,7 @@
 							/>
 						</div>
 						<div>
-							<label for="ExDate">Enter the expiring date</label>
+							<label for="ExDate">Enter the purchase date</label>
 							<input type="date" id="ExDate" v-model="editProd.ExDate" />
 						</div>
 					</div>
@@ -255,13 +255,7 @@
 
 				<tr v-for="prod in productList" :key="prod.id">
 					<td>{{ prod.id }}</td>
-					<td
-						:style="
-							(Number(prod.ExDate) - Number(new Date())) / 8.64e7 < 10
-								? { color: 'red' }
-								: { color: 'black' }
-						"
-					>
+					<td>
 						{{ new Date(prod.ExDate).toDateString() }}
 					</td>
 					<td>{{ prod.barcode }}</td>
