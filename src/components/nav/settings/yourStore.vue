@@ -28,6 +28,11 @@
 					<ul v-for="cat in categories" :key="cat.id">
 						<li class="categorie">{{ cat.name }}</li>
 						<img src="@/assets/icons/Edit.svg" alt="" @click="editCat(cat)" />
+						<img
+							src="@/assets/icons/Delete.png"
+							@click="deleteCat(cat)"
+							:style="cat.name === 'All' ? 'display: none' : 'display: block'"
+						/>
 					</ul>
 				</div>
 			</div>
@@ -86,6 +91,9 @@ export default {
 			} else if (this.showEditCat) {
 				this.showEditCat = true;
 			}
+		},
+		deleteCat(cat) {
+			this.$store.dispatch("deleteCat", cat);
 		},
 	},
 	computed: {

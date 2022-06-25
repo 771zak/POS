@@ -351,6 +351,11 @@ export default createStore({
 		changeTax({ state }, payload) {
 			state.tax = payload;
 		},
+		deleteCat({ state }, payload) {
+			db.collection("categories").doc(payload).delete();
+			let i = state.categories.indexOf(payload);
+			state.categories.splice(i, 1);
+		},
 	},
 
 	modules: {},
