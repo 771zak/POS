@@ -4,7 +4,6 @@ import { app, protocol, Menu, BrowserWindow, ipcMain, dialog } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 const isDevelopment = process.env.NODE_ENV !== "production";
-const { PosPrinter } = require("electron-pos-printer");
 let win;
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -64,30 +63,23 @@ ipcMain.on("sign-error", () => {
 });
 
 ipcMain.on("load-receipt", (load) => {
-	let receiptPage = new BrowserWindow({
-		show: true,
+	let receipt_page = new BrowserWindow({
 		width: 400,
 		height: 500,
-		frame: false,
-		autoHideMenuBar: true,
 		webPreferences: {
 			nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-			contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
-			enableRemoteModule: true,
+			plugins: true,
 		},
 	});
 
 	if (process.env.WEBPACK_DEV_SERVER_URL) {
-		receiptPage.loadURL(process.env.WEBPACK_DEV_SERVER_URL + "//#/receiptPage");
+		// Load the url of the dev server if in development mode
+		receipt_page.loadURL(process.env.WEBPACK_DEV_SERVER_URL + "receipt_page");
+		if (!process.env.IS_TEST) receipt_page.webContents.openDevTools();
+	} else {
+		// Load the index.html when not in development
+		receipt_page.loadURL(`app://./receipt_page.html`);
 	}
-
-	receiptPage.on("closed", () => {
-		receiptPage = null;
-	});
-
-	receiptPage.webContents.on("did-frame-finish-load", () => {
-		receiptPage.webContents.send("loadReceipt");
-	});
 });
 
 // Quit when all windows are closed.

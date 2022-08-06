@@ -169,7 +169,11 @@
 						<div style="flex-direction: row; align-items: center">
 							<label for="categorie">Enter the categorie</label>
 							<select id="categorie" v-model="editProd.cat">
-								<option :value="cat" v-for="cat in categories" :key="cat.id">
+								<option
+									:value="cat.name"
+									v-for="cat in categories"
+									:key="cat.id"
+								>
 									{{ cat.name }}
 								</option>
 							</select>
@@ -235,7 +239,7 @@
 			</div>
 		</transition>
 
-		<!-- show the products -->
+		<!-- show product modal -->
 		<div
 			class="product-table"
 			:style="showInput || showEdit ? { opacity: '0.4' } : { opacity: '1' }"
@@ -244,6 +248,7 @@
 				<tr>
 					<th>Id</th>
 					<th>EXP date</th>
+					<th>Category</th>
 					<th>Ref</th>
 					<th>Brand</th>
 					<th>Product name</th>
@@ -258,6 +263,7 @@
 					<td>
 						{{ new Date(prod.ExDate).toDateString() }}
 					</td>
+					<td>{{ prod.cat }}</td>
 					<td>{{ prod.barcode }}</td>
 					<td>{{ prod.brand }}</td>
 					<td>{{ prod.name }}</td>
@@ -378,6 +384,7 @@ export default {
 					Sprice: this.editProd.Sprice,
 					name: this.editProd.name,
 					qty: this.editProd.qty,
+					cat: this.editProd.cat,
 					barcode: this.editProd.barcode,
 					ExDate: new Date(this.editProd.ExDate),
 				});

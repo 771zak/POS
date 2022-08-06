@@ -93,6 +93,17 @@ export default {
 			}
 		},
 		deleteCat(cat) {
+			db.collection("product")
+				.get()
+				.then((products) => {
+					products.forEach((el) => {
+						if (el.cat == cat.name) {
+							db.collection("product").doc({ id: el.id }).update({
+								cat: "All",
+							});
+						}
+					});
+				});
 			this.$store.dispatch("deleteCat", cat);
 		},
 	},
