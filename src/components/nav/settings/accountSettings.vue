@@ -6,103 +6,110 @@
 		<div class="a-s-email">
 			<h2>Email address</h2>
 			<div class="a-s-email-content">
-				<p>Your email address is <strong v-if="!editEmail">{{user.email}}</strong>
-					<input type="email" v-model="user.email" v-if="editEmail"
+				<p>
+					Your email address is
+					<strong v-if="!editEmail">{{ user.email }}</strong>
+					<input
+						type="email"
+						v-model="user.email"
+						v-if="editEmail"
 						@blur="saveEmail()"
 						@keyup.enter="saveEmail()"
 					/>
 				</p>
-				<button @click="editEmail = !editEmail">{{ editEmail? "save": 'change'}}</button>
+				<button @click="editEmail = !editEmail">
+					{{ editEmail ? "save" : "change" }}
+				</button>
 			</div>
-			<hr>
+			<hr />
 		</div>
 		<div class="a-s-password">
-			<h2 style="display: inline; margin-right: 120px;">Password</h2>
-			<button @click="showPassChange = !showPassChange"
-				style="display: inline;"
-			>{{ showPassChange? "hide": "show" }}</button>
+			<h2 style="display: inline; margin-right: 120px">Password</h2>
+			<button @click="showPassChange = !showPassChange" style="display: inline">
+				{{ showPassChange ? "hide" : "show" }}
+			</button>
 			<div class="a-s-password-content" v-if="showPassChange">
 				<div>
 					<label for="cuPass">Currrent password</label>
-					<input type="password" id="cuPass" 
+					<input
+						type="password"
+						id="cuPass"
 						v-model="checkpassowrd"
 						@input="checkPass"
 					/>
 				</div>
 				<div v-if="passChecked">
-					<label for="newPass" >New password</label>
-					<input type="password" v-model="newPass">
+					<label for="newPass">New password</label>
+					<input type="password" v-model="newPass" />
 				</div>
-				<button
-					id="save-pass"
-					@click="savePass()"
-				>Save changes</button>
+				<button id="save-pass" @click="savePass()">Save changes</button>
 			</div>
 		</div>
 		<div class="a-s-delete">
-			<hr>
+			<hr />
 			<h2>Delete account</h2>
-			<p>Would you like to delete your account?<br>
+			<p>
+				Would you like to delete your account?<br />
 				Deleting your account will not remove the store content with it.
 			</p>
-			<button
-				@click="deleteAccount()"
-			>Delete this account</button>
+			<button @click="deleteAccount()">Delete this account</button>
 		</div>
 	</div>
 </template>
 
 <script>
-import Localbase from 'localbase';
-const db = new Localbase('db');
+import Localbase from "localbase";
+const db = new Localbase("db");
 const smallTalk = require("smalltalk");
 
-	export default {
-		name: 'accountSettings',
-		data() {
-			return {
-				user: [],
-				editEmail: false,
-				checkpassowrd: '',
-				passChecked: false,
-				showPassChange: false,
-				newPass: ''
+export default {
+	name: "accountSettings",
+	data() {
+		return {
+			user: [],
+			editEmail: false,
+			checkpassowrd: "",
+			passChecked: false,
+			showPassChange: false,
+			newPass: "",
+		};
+	},
+	methods: {
+		saveEmail() {
+			db.collection("users").doc({ userName: this.user.userName }).update({
+				email: this.user.email,
+			});
+			this.editEmail = false;
+		},
+		checkPass() {
+			if (this.checkpassowrd == this.user.password) {
+				return (this.passChecked = true);
 			}
 		},
-		methods: {
-			saveEmail() {
-				db.collection("users").doc({ userName: this.user.userName}).update({
-					email: this.user.email
-				})
-				this.editEmail = false
-			},
-			checkPass() {
-				if (this.checkpassowrd == this.user.password) {
-					return this.passChecked = true;
-				}
-			},
-			savePass() {
-				db.collection("users").doc({ userName: this.user.userName }).update({
-					password: this.newPass
-				})
-			},
-			deleteAccount() {
-				smallTalk.confirm("Question", "Are you sure?").then(()=> {
+		savePass() {
+			db.collection("users").doc({ userName: this.user.userName }).update({
+				password: this.newPass,
+			});
+		},
+		deleteAccount() {
+			smallTalk
+				.confirm("Question", "Are you sure?")
+				.then(() => {
 					db.collection("users").doc({ userName: this.user.userName }).delete();
 					localStorage.removeItem("user-info");
-					this.$router.push({ name: 'signIn' });
-				}).catch(()=> {
-					console.log('no');
+					this.$router.push({ name: "signIn" });
 				})
-			}
+				.catch(() => {
+					console.log("no");
+				});
 		},
-		computed: {
-		},
-		mounted() {
-			let user = JSON.parse(localStorage.getItem('user-info'))
-			this.user = user
-		}
-	}
+	},
+	computed: {},
+	mounted() {
+		let user = JSON.parse(localStorage.getItem("user-info"));
+		this.user = user;
+	},
+};
 </script>
 
 <style>
@@ -127,9 +134,6 @@ const smallTalk = require("smalltalk");
 label {
 	display: block;
 	margin-bottom: 5px;
-}
-label::after {
-	content: " :";
 }
 .settings input {
 	padding: 5px 10px;
@@ -157,7 +161,8 @@ label::after {
 .a-s-delete {
 	margin-top: 20px;
 }
-.a-s-delete h2, .a-s-delete p {
+.a-s-delete h2,
+.a-s-delete p {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
